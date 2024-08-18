@@ -6,7 +6,7 @@ from django.db.models import Count
 
 class TagQuerySet(models.QuerySet):
     def popular(self):
-        popular_tags = self.annotate(num_posts=Count('posts', distinct=True)).order_by('-num_posts')
+        popular_tags = self.annotate(num_posts=Count('posts', distinct=True)).order_by('-num_posts').prefetch_related('posts')
         return popular_tags
 
 
@@ -21,9 +21,7 @@ class PostQuerySet(models.QuerySet):
         return popular_posts
 
     def fetch_with_comments_count(self):
-        """
-        Сокращает количество промежуточных структур данных создающихся внутри БД при выполнении annotate
-        """
+        """Сокращает количество промежуточных структур данных создающихся внутри БД при выполнении 2 annotate."""
         popular_posts_ids = [post.id for post in self]
 
         posts_with_comments = Post.objects.filter(id__in=popular_posts_ids).annotate(
