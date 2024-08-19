@@ -2,11 +2,13 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.db.models import Count
+from django.db.models import Prefetch
 
 
 class TagQuerySet(models.QuerySet):
     def popular(self):
-        popular_tags = self.annotate(num_posts=Count('posts', distinct=True)).order_by('-num_posts').prefetch_related('posts')
+        popular_tags = self.annotate(num_posts=Count('posts', distinct=True)).order_by('-num_posts')\
+            .prefetch_related(Prefetch('posts', queryset=Post.objects.all()))
         return popular_tags
 
 

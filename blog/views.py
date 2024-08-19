@@ -3,6 +3,7 @@ from blog.models import Comment, Post, Tag
 from django.db.models import Count
 
 
+
 def serialize_post_optimized(post):
     return {
         'title': post.title,
@@ -14,6 +15,12 @@ def serialize_post_optimized(post):
         'slug': post.slug,
         'tags': [serialize_tag(tag) for tag in post.tags.popular()],
         'first_tag_title': post.tags.all()[0].title,
+    }
+
+def serialize_tag_optimized(tag):
+    return {
+        'title': tag.title,
+        'posts_with_tag': tag.num_posts,
     }
 
 
