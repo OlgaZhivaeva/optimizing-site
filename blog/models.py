@@ -21,6 +21,9 @@ class PostQuerySet(models.QuerySet):
         popular_posts = self.annotate(num_likes=Count('likes')).order_by('-num_likes').prefetch_related(
             'author')
         return popular_posts
+    def commented(self):
+        posts_with_comments = self.annotate(num_comments=Count('comments', distinct=True)).prefetch_related('author')
+        return posts_with_comments
 
     def fetch_with_comments_count(self):
         """Сокращает количество промежуточных структур данных создающихся внутри БД при выполнении 2 annotate."""
