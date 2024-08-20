@@ -17,12 +17,6 @@ def serialize_post_optimized(post):
         'first_tag_title': post.tags.all()[0].title,
     }
 
-def serialize_tag_optimized(tag):
-    return {
-        'title': tag.title,
-        'posts_with_tag': tag.num_posts,
-    }
-
 
 def serialize_tag(tag):
     return {
